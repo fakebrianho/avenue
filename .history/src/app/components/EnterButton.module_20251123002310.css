@@ -1,0 +1,18 @@
+.enterButton {
+	background: transparent;
+	border: 1px solid #fff;
+	color: #fff;
+	padding: 12px 32px;
+	font-size: 14px;
+	font-weight: 300;
+	letter-spacing: 2px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	opacity: 0;
+}
+
+.enterButton:hover {
+	background: #fff;
+	color: #000;
+}
