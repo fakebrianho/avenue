@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
+import { useRef, useEffect, useState, useCallback, useMemo, memo } from 'react'
 import { gsap } from 'gsap'
 import styles from './IntroText.module.css'
 import { EnterButton } from './EnterButton'

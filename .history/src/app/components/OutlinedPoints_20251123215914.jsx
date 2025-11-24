@@ -75,6 +75,7 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
   const hoverRef = useRef()
   const groupRef = useRef()
   const [hoverPos, setHoverPos] = useState(null)
+  const debounceTimerRef = useRef(null)
   const { mutate, data, error, isPending } = useGetData()
 
   useEffect(() => {
@@ -110,10 +111,24 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
 
  
 
+  // Reuse Float32Array to avoid allocations
+  const hoverPositionsRef = useRef(new Float32Array(3))
   const hoverPositions = useMemo(() => {
     if (!hoverPos) return null
-    return new Float32Array([hoverPos.x, hoverPos.y, hoverPos.z])
+    hoverPositionsRef.current[0] = hoverPos.x
+    hoverPositionsRef.current[1] = hoverPos.y
+    hoverPositionsRef.current[2] = hoverPos.z
+    return hoverPositionsRef.current
   }, [hoverPos])
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [])
 
   // Optimize useFrame - only run when needed
   useFrame(() => {

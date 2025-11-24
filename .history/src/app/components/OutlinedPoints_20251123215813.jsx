@@ -57,7 +57,7 @@ const OutlinedPointMaterial = shaderMaterial(
 
 extend({ OutlinedPointMaterial })
 
-export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }) {
+export function OutlinedPoints({ isLoading = false }) {
 
   const {
 		play: playAudio,
@@ -75,6 +75,7 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
   const hoverRef = useRef()
   const groupRef = useRef()
   const [hoverPos, setHoverPos] = useState(null)
+  const debounceTimerRef = useRef(null)
   const { mutate, data, error, isPending } = useGetData()
 
   useEffect(() => {
@@ -115,14 +116,21 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
     return new Float32Array([hoverPos.x, hoverPos.y, hoverPos.z])
   }, [hoverPos])
 
-  // Optimize useFrame - only run when needed
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [])
+
   useFrame(() => {
     if (groupRef.current && !hoverPos) {
       groupRef.current.rotation.y += 0.0002
     }
   })
-
-  const handleClick = useCallback((e) => {
+  const handleClick = (e) => {
     const cachedCount = getCachedDataCount()
     if (cachedCount !== null && cachedCount > 0) {
       const randomIndex = Math.floor(Math.random() * cachedCount)
@@ -130,9 +138,10 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
     } else {
       console.warn('Cached count not available, cannot generate random index')
     }
-  }, [mutate])
+	}
 
-  const handlePointerMove = useCallback((e) => {
+  const handlePointerMove = (e) => {
+
     if (e.index !== undefined && e.index !== null && e.index < count) {
       const index = e.index
       const x = positions[index * 3]
@@ -146,15 +155,15 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
         const localPoint = e.point.clone()
         cloudRef.current.worldToLocal(localPoint)
         setHoverPos(localPoint)
-      } else if (e.point) {
+      } else {
         setHoverPos(e.point.clone())
       }
     }
-  }, [positions, count])
+  }
 
-  const handlePointerOut = useCallback(() => {
+  const handlePointerOut = () => {
     setHoverPos(null)
-  }, [])
+  }
 
   return (
     <group ref={groupRef} position={[0, 28, 0]}>
@@ -198,4 +207,4 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
       )}
     </group>
   )
-})
+}

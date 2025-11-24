@@ -57,7 +57,7 @@ const OutlinedPointMaterial = shaderMaterial(
 
 extend({ OutlinedPointMaterial })
 
-export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }) {
+export function OutlinedPoints({ isLoading = false }) {
 
   const {
 		play: playAudio,
@@ -75,6 +75,7 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
   const hoverRef = useRef()
   const groupRef = useRef()
   const [hoverPos, setHoverPos] = useState(null)
+  const debounceTimerRef = useRef(null)
   const { mutate, data, error, isPending } = useGetData()
 
   useEffect(() => {
@@ -114,6 +115,15 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
     if (!hoverPos) return null
     return new Float32Array([hoverPos.x, hoverPos.y, hoverPos.z])
   }, [hoverPos])
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [])
 
   // Optimize useFrame - only run when needed
   useFrame(() => {
@@ -198,4 +208,4 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
       )}
     </group>
   )
-})
+}

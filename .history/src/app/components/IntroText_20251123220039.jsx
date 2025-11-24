@@ -1,10 +1,9 @@
 'use client'
-import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
+import { useRef, useEffect, useState, useCallback, useMemo, memo } from 'react'
 import { gsap } from 'gsap'
 import styles from './IntroText.module.css'
 import { EnterButton } from './EnterButton'
 
-// Removed memo temporarily to debug - will add back with proper comparison if needed
 export function IntroText({
 	isVisible = false,
 	onEnter,
@@ -16,21 +15,17 @@ export function IntroText({
 }) {
 	const textRef = useRef(null)
 	const buttonRef = useRef(null)
-	const isClickedRef = useRef(false)
 	const [isClicked, setIsClicked] = useState(false)
 	const [shouldShowButton, setShouldShowButton] = useState(true)
 	const initialText = 'Headphones recommended.'
-	
-	// Memoize sequence texts to avoid recreating array
-	const sequenceTexts = useMemo(() => [
+	const sequenceTexts = [
 		"In a moment you'll enter a place I call the Avenue of Broken Dreams.",
 		'Click and drag to move the camera, click on different elements to interact with them.',
-	], [])
+	]
 
-	const handleEnterClick = useCallback(() => {
-		// Prevent multiple clicks using ref to avoid dependency issues
-		if (isClickedRef.current) return
-		isClickedRef.current = true
+	const handleEnterClick = () => {
+		// Prevent multiple clicks
+		if (isClicked) return
 		setIsClicked(true)
 		// Trigger camera animation
 		if (onTriggerCameraAnimation) {
@@ -131,19 +126,17 @@ export function IntroText({
 				)
 			}
 		})
-	}, [onTriggerCameraAnimation, playAudio, loaderRef, canvasWrapperRef, onEnter, sequenceTexts])
+	}
 
 	useEffect(() => {
 		if (!isVisible || !textRef.current) {
 			// Reset states when hidden
-			isClickedRef.current = false
 			setIsClicked(false)
 			setShouldShowButton(true)
 			return
 		}
 
 		// Reset states when becoming visible
-		isClickedRef.current = false
 		setIsClicked(false)
 		setShouldShowButton(true)
 

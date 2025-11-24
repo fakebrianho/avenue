@@ -123,6 +123,7 @@ export function useAudio({
 		}
 
 		return () => {
+			isMountedRef.current = false
 			const count = instanceRefCounts.get(cacheKey) || 0
 			
 			if (count > 1) {

@@ -1,11 +1,10 @@
 'use client'
-import { useRef, useEffect, useState, useCallback, useMemo } from 'react'
+import { useRef, useEffect, useState, useCallback, useMemo, memo } from 'react'
 import { gsap } from 'gsap'
 import styles from './IntroText.module.css'
 import { EnterButton } from './EnterButton'
 
-// Removed memo temporarily to debug - will add back with proper comparison if needed
-export function IntroText({
+export const IntroText = memo(function IntroText({
 	isVisible = false,
 	onEnter,
 	playAudio,
@@ -210,4 +209,4 @@ export function IntroText({
 			</div>
 		</div>
 	)
-}
+})

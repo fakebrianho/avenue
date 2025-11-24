@@ -74,25 +74,14 @@ export default function Home() {
 	const loaderRef = useRef(null)
 	const [shouldAnimateCamera, setShouldAnimateCamera] = useState(false)
 
-	// Memoize camera animation callbacks
-	const triggerCameraAnimation = useCallback(() => {
+	// Function to trigger camera animation
+	const triggerCameraAnimation = () => {
 		setShouldAnimateCamera(true)
-	}, [])
+	}
 
-	const handleCameraAnimationComplete = useCallback(() => {
+	const handleCameraAnimationComplete = () => {
 		setShouldAnimateCamera(false)
-	}, [])
-
-	// Memoize canvas onCreated callback
-	const handleCanvasCreated = useCallback((state) => {
-		state.gl.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // Cap at 2 for performance
-		state.raycaster.params.Points = { threshold: 0.1 } // adjust sensitivity
-	}, [])
-
-	// Memoize model load callback
-	const handleModelLoad = useCallback(() => {
-		setModelLoaded(true)
-	}, [])
+	}
 
 	return (
 		<div className={styles.page}>
@@ -109,11 +98,14 @@ export default function Home() {
 				<div ref={canvasWrapperRef} className={styles.canvasWrapper}>
 					<Canvas
 						camera={{ position: [0, 5, 100] }}
-						onCreated={handleCanvasCreated}
+						onCreated={(state) => {
+							state.gl.setPixelRatio(window.devicePixelRatio)
+							state.raycaster.params.Points = { threshold: 0.1 } // adjust sensitivity
+						}}
 					>
 						<color attach='background' args={['black']} />
 
-						<ModelLoader onLoad={handleModelLoad} />
+						<ModelLoader onLoad={() => setModelLoaded(true)} />
 						<CameraAnimator
 							targetPosition={[0, 5, 15]}
 							duration={40}
@@ -123,10 +115,6 @@ export default function Home() {
 						<OrbitControls
 							makeDefault
 							enabled={!shouldAnimateCamera}
-							enablePan={true}
-							enableZoom={true}
-							enableDamping={true}
-							enableRotate={true}
 						/>
 						<ambientLight intensity={4.75} color={0xffc0cb} />
 						<Floor position={[0, -0.25, -2]} />

@@ -123,10 +123,6 @@ export default function Home() {
 						<OrbitControls
 							makeDefault
 							enabled={!shouldAnimateCamera}
-							enablePan={true}
-							enableZoom={true}
-							enableDamping={true}
-							enableRotate={true}
 						/>
 						<ambientLight intensity={4.75} color={0xffc0cb} />
 						<Floor position={[0, -0.25, -2]} />

@@ -39,14 +39,6 @@ export function useAudio({
 		callbackRef.current = callback
 	}, [callback])
 
-	// Reset mount tracking on mount
-	useEffect(() => {
-		isMountedRef.current = true
-		return () => {
-			isMountedRef.current = false
-		}
-	}, [])
-
 	// Initialize Howl - only recreate when essential props change
 	useEffect(() => {
 		if (!src) return
@@ -123,6 +115,7 @@ export function useAudio({
 		}
 
 		return () => {
+			isMountedRef.current = false
 			const count = instanceRefCounts.get(cacheKey) || 0
 			
 			if (count > 1) {

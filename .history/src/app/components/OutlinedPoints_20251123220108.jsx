@@ -115,6 +115,15 @@ export const OutlinedPoints = memo(function OutlinedPoints({ isLoading = false }
     return new Float32Array([hoverPos.x, hoverPos.y, hoverPos.z])
   }, [hoverPos])
 
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [])
+
   // Optimize useFrame - only run when needed
   useFrame(() => {
     if (groupRef.current && !hoverPos) {

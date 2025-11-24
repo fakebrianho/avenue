@@ -125,7 +125,6 @@ export default function Home() {
 							enabled={!shouldAnimateCamera}
 							enablePan={true}
 							enableZoom={true}
-							enableDamping={true}
 							enableRotate={true}
 						/>
 						<ambientLight intensity={4.75} color={0xffc0cb} />
