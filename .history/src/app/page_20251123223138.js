@@ -116,7 +116,7 @@ export default function Home() {
 						<ModelLoader onLoad={handleModelLoad} />
 						<CameraAnimator
 							targetPosition={[0, 5, 15]}
-							duration={46}
+							duration={44}
 							animate={shouldAnimateCamera}
 							onComplete={handleCameraAnimationComplete}
 						/>

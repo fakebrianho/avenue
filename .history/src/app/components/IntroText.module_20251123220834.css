@@ -15,12 +15,9 @@
 	letter-spacing: 2px;
 }
 
-@media screen and (max-width: 768px) {
-	.introText {
-		font-size: 14px;
+	@media screen {
+		
 	}
-}	
-
 .introText span {
 	display: inline-block;
 }
