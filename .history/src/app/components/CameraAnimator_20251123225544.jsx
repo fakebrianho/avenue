@@ -73,7 +73,7 @@ export function CameraAnimator({
 				animationRef.current = null
 			}
 		}
-	}, [animate, memoizedTargetPosition, duration,  camera, handleComplete])
+	}, [animate, memoizedTargetPosition, duration, ease, camera, handleComplete])
 
 	return null // This component doesn't render anything
 }
