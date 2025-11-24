@@ -38,7 +38,7 @@ export default function Home() {
 		isLoaded: audio2Loaded,
 		play: playAudio2,
 	  } = useAudio({
-		src: 'aiBG.mp3', // or a different file
+		src: '.mp3', // or a different file
 		autoplay: false,
 		loop: true,
 		volume: 1,
